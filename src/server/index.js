@@ -1,26 +1,29 @@
-// TODO: Configure the environment variables
+const dotenv = require('dotenv');
+dotenv.config();
+
+// Configuring environment variables
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mockAPIResponse = require('./mockAPI.js');
-
+const axios = require('axios')
 const PORT = 8081;
 
-// TODO add Configuration to be able to use env variables
 const API_URL = 'https://api.meaningcloud.com/sentiment-2.1';
+const apiKey = process.env.API_KEY
 
 
-// TODO: Create an instance for the server
+// Start an instance for the server
 const app = express();
 
-// TODO: Configure cors to avoid cors-origin issue
+// Cors for cors-origin allowance
 app.use(cors());
 
-// TODO: Configure express to use body-parser as middle-ware.
+// Configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// TODO: Configure express static directory.
+// Configure express static directory.
 app.use(express.static('dist'));
 
 app.get('/', function (req, res) {
@@ -28,29 +31,31 @@ app.get('/', function (req, res) {
     res.sendFile(path.resolve('src/client/views/index.html'))
 });
 
-// a route that handling post request for new URL that coming from the frontend
 app.post('/add-url', async (req, res) => {
+
+    const userInput = req.body.url
+    const URL = `${API_URL}?key=${apiKey}&url=${userInput}&lang=en`
+
     try {
-        /* TODO:
-            1. GET the url from the request body
-            2. Build the URL it should be something like `${BASE_API_URL}?key=${MEAN_CLOUD_API_KEY}&url=${req.body.url}&lang=en`
-            3. Fetch Data from API
-            4. Send it to the client
-            5. REMOVE THIS TODO AFTER DOING IT 😎😎
-            server sends only specified data to the client with below codes
-             const sample = {
-               text: '',
-               score_tag : '',
-               agreement : '',
-               subjectivity : '',
-               confidence : '',
-               irony : ''
-             }
-        */
+        const data = await axios(URL)
+        console.log(data)
+        res.json({
+            text: data.sentence_list[0].text,
+            score_tag: data.score_tag,
+            agreement: data.agreement,
+            subjectivity: data.subjectivity,
+            confidence: data.confidence,
+            irony: data.irony
+        })
+        return
     }
 
     catch (error) {
         console.log(error.message)
+        res.json({
+            status: 'error',
+            message: 'Error: failed to fetch data'
+        })
     }
 });
 
@@ -58,10 +63,10 @@ app.get('/test', function (req, res) {
     res.send(mockAPIResponse)
 })
 
-// designates what port the app will listen to for incoming requests
+// Setup Server
 app.listen(PORT, (error) => {
     if (error) throw new Error(error)
     console.log(`Server listening on port ${PORT}!`)
 })
 
-// TODO: export app to use it in the unit testing
+// : export app to use it in the unit testing
