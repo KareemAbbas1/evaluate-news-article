@@ -20,7 +20,7 @@ const post = async (url = '', data = {}) => {
 }
 
 const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     
     const url = document.getElementById('article-url').value
     // console.log(url)

@@ -6,10 +6,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mockAPIResponse = require('./mockAPI.js');
-const axios = require('axios')
+const axios = require('axios');
+
 const PORT = 8081;
 
 const API_URL = 'https://api.meaningcloud.com/sentiment-2.1';
+
 const apiKey = process.env.API_KEY
 
 
@@ -35,19 +37,20 @@ app.post('/add-url', async (req, res) => {
 
     const userInput = req.body.url
     const URL = `${API_URL}?key=${apiKey}&url=${userInput}&lang=en`
-
+    console.log(URL)
     try {
         const data = await axios(URL)
-        console.log(data)
+        const finalData = data.data
         res.json({
-            text: data.sentence_list[0].text,
-            score_tag: data.score_tag,
-            agreement: data.agreement,
-            subjectivity: data.subjectivity,
-            confidence: data.confidence,
-            irony: data.irony
+            text: finalData.sentence_list[0].text,
+            score_tag: finalData.score_tag,
+            agreement: finalData.agreement,
+            subjectivity: finalData.subjectivity,
+            confidence: finalData.confidence,
+            irony: finalData.irony
         })
-        return
+        res.send(finalData);
+        return finalData
     }
 
     catch (error) {
