@@ -1,6 +1,7 @@
 import handleSubmit from './js/formHandler';
 import { checkURL } from './js/checkURL';
 
+import './styles/style.css';
 
 const buttonSubmit = document.querySelector('.btn-submit')
 
@@ -27,15 +28,3 @@ export {
     checkURL,
     handleSubmit
 }
-
-// window.addEventListener('DOMContentLoaded', () => {
-    
-//     const buttonSubmit = document.querySelector('.btn-submit')
-//     buttonSubmit.addEventListener("click", () => {
-//         handleSubmit()
-//     })
-// })
-
-
-// TODO: include your scss file here
-// console.log('Hello Webpack');
