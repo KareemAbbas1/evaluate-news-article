@@ -8,9 +8,10 @@
   <body>
     <main>
       <div class="container">
+        <h1>Evaluate News Article</h1>
         <p>Enter a URL of an article / a blog to discover its sentiment.</p>
         <section>
-          <form id="form">
+          <form id="form" onsubmit="Client.handleSubmit(event)">
             <label for="article-url">URL</label>
             <input id="article-url" type="text" name="input" value="" placeholder="Enter Article URL here" />
             <button
@@ -41,6 +42,7 @@
           navigator.serviceWorker.register('/service-worker.js')
         })
       }
-    </script>
+      </script>
+      <!-- <script src='../index.js'></script> -->
   <script type="text/javascript" src="main.js"></script></body>
 </html>
